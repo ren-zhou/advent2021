@@ -1,20 +1,46 @@
+# === Part 1 ===
+
+# === dict lambda: 128 char ===
 d={}
 [(lambda a,b:d.__setitem__(a[0],d.get(a[0],0)+int(b)))(*l.split()) for l in open("data.txt")]
 print((d['d']-d['u'])*d['f'])
 
+# === dict func: 118 char ===
+d={}
+def f(a,b):
+ d[a[0]]=d.get(a[0],0)+int(b)
+[f(*l.split()) for l in open("data.txt")]
+print((d['d']-d['u'])*d['f'])
+
+# === imaginary number: 118 char ===
 n=sum((lambda a,b:{'d':1,'u':-1,'f':1j}[a[0]]*int(b))(*l.split()) for l in open("data.txt"))
 print(int(n.real*n.imag))
 
-hor, dep, aim = 0, 0, 0
-for line in open("data.txt"):
-    key, val = line.split()
-    key, val = key[0], int(val)
-    hor += (key == 'f') * val
-    dep += {'d':1, 'u':-1, 'f':aim, 'a':0}[key] * val
-    aim += (key == 'a') * val
-print(hor * dep)
-
+# == reduce: 202 char ===
 from functools import reduce
 (lambda x:print(x[0]*x[1]))(reduce(lambda x,y:(lambda h,d,k,v:[h+(k=='f')*v,d+{'d':1,'u':-1,'f':0}[k]*v])(*x,y[0][0],int(y[1])),[l.split() for l in open("data.txt")],[0]*2))
 
+# === Part 2 ===
+
+# === reduce: 219 char ===
+from functools import reduce
 (lambda x:print(x[0]*x[1]))(reduce(lambda x,y:(lambda h,d,a,k,v:[h+(k=='f')*v,d+(k=='f')*a*v,a+{'d':1,'u':-1,'f':0}[k]*v])(*x,y[0][0],int(y[1])),[l.split() for l in open("data.txt")],[0]*3))
+
+
+# === 2-in-1: 244 char ===
+from functools import reduce
+print([(lambda x,y,_:x*y)(*reduce(lambda x,y:f(*x,lambda i:(y[0]=='fdu'[i])*int(y.split()[1])),open("data.txt"),[0]*3)) for f in [lambda h,d,a,g:[h+g(0),d+g(1)-g(2),a],lambda h,d,a,g:[h+g(0),d+g(0)*a,a+g(1)-g(2)]]])
+
+# === more readable formatting of above ===
+print([
+    (lambda x,y,_:x*y)(
+        *reduce(
+            lambda x,y:f(*x,lambda i:(y[0]=='fdu'[i])*int(y.split()[1])),
+            open("data.txt"),
+            [0]*3
+        )
+    ) for f in [
+        lambda h,d,a,g:[h+g(0),d+g(1)-g(2),a],
+        lambda h,d,a,g:[h+g(0),d+g(0)*a,a+g(1)-g(2)]
+    ]
+])
