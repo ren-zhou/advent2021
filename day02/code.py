@@ -31,7 +31,7 @@ from functools import reduce
 from functools import reduce
 print([(lambda x,y,_:x*y)(*reduce(lambda x,y:f(*x,lambda i:(y[0]=='fdu'[i])*int(y.split()[1])),open("data.txt"),[0]*3)) for f in [lambda h,d,a,g:[h+g(0),d+g(1)-g(2),a],lambda h,d,a,g:[h+g(0),d+g(0)*a,a+g(1)-g(2)]]])
 
-# === more readable formatting of above ===
+# === more readable version of above ===
 print([
     (lambda x,y,_:x*y)(
         *reduce(
@@ -44,3 +44,8 @@ print([
         lambda h,d,a,g:[h+g(0),d+g(0)*a,a+g(1)-g(2)]
     ]
 ])
+
+# === the real 2-in-1: 188 char ===
+from functools import reduce
+x,y,z=reduce(lambda x,y:(lambda h,d,a,g:[h+g(0),d+g(0)*a,a+g(1)-g(2)])(*x,lambda i:(y[0]=='fdu'[i])*int(y.split()[1])),open("data.txt"),[0]*3)
+print([x*z,x*y])
