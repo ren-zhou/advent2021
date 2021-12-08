@@ -18,6 +18,12 @@ for l in open("data.txt"):
  d[l[0]]=d.get(l[0],0)+int(l.split()[1])
 print((d['d']-d['u'])*d['f'])
 
+d={k:0 for k in "duf"}
+d={'d':0,'u':0,'f':0}
+for l in open("data.txt"):
+ d[l[0]]+=int(l.split()[1])
+print((d['d']-d['u'])*d['f'])
+
 # === imaginary number: 118 char ===
 n=sum((lambda a,b:{'d':1,'u':-1,'f':1j}[a[0]]*int(b))(*l.split()) for l in open("data.txt"))
 print(int(n.real*n.imag))
